@@ -15,7 +15,7 @@ module SIMJI
     attr_accessor :mem_instr,:data,:reg
     attr_accessor :old_pc,:addr
     attr_accessor :pc
-    attr_accessor :r1,:final_o,:r2 # made accessible for GUI
+    attr_accessor :r1,:o,:final_o,:r2 # made accessible for GUI
     attr_accessor :flag
     attr_accessor :stopped,:is_load
 
@@ -57,9 +57,9 @@ module SIMJI
       slices=tab.each_slice(8).to_a
       slices.each do |slice|
         slice.each do |r|
-          print r
+          print r if !$gui_activated
         end
-        puts
+        #puts if !$gui_activated
       end
       @timer.continue
     end
@@ -82,15 +82,14 @@ module SIMJI
     end
 
     def decode code
-      puts @dis.disassemble code
+      @dis.disassemble code
 
       opcode=code.bit_field(31..27)
 
-      @r1,@flag,o,@r2=extract([26..22,21..21,20..5,4..0],code)
-      puts "r1=#{@r1},flag=#{@flag},o=#{o},r2=#{r2}"
-      puts r2
+      @r1,@flag,@o,@r2=extract([26..22,21..21,20..5,4..0],code)
+      puts "r1=#{@r1},flag=#{@flag},o=#{o},r2=#{r2}" if !$gui_activated
       @addr=nil
-      @final_o = (flag==1) ? o : @reg[o]
+      @final_o = (@flag==1) ? @o : @reg[o]
 
       @is_load =false #for GUI
 

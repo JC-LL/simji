@@ -31,7 +31,7 @@ module SIMJI
       when :add,:sub,:mul,:div,:and,:or,:xor,:shl,:slt,:sle,:seq,:load,:store
         ra=instr.bit_field(26..22)
         flag_o=instr[21]
-        o_is_reg=flag_o==0
+        o_is_reg=(flag_o==0)
         o=instr.bit_field(20..5)
         imm_o = o #TBC
         o=o_is_reg ? "r#{o}" : imm_o

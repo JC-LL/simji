@@ -19,6 +19,7 @@ module SIMJI
     attr_accessor :iss #needed by runner
 
     def initialize glade_path
+      $gui_activated=true
       @builder = Gtk::Builder.new
       @builder.add_from_file(glade_path)
       @builder.connect_signals {|handler| method (handler) }
@@ -163,8 +164,10 @@ module SIMJI
 
     def on_timeout
       unless @pause or @nb_cycles_reached
-        puts "nb_cycles       : #{@nb_cycles}"
-        puts "# cycles to run : #{@nb_cycles_to_run}"
+        if !$gui_activated
+          puts "nb_cycles       : #{@nb_cycles}"
+          puts "# cycles to run : #{@nb_cycles_to_run}"
+        end
         if !@iss.stopped
           @iss.step
           @nb_cycles+=1
@@ -199,7 +202,6 @@ module SIMJI
 
     def draw_instr_mem cr
       if @iss.mem_instr
-        #cr.set_font "Monospace"
         cr.select_font_face "Monospace"
         cr.set_font_size 13
         @iss.mem_instr.each_with_index do |instr,addr|
@@ -245,8 +247,7 @@ module SIMJI
         cr.move_to 300, 20+i*15
         reg_s="r#{i}".ljust(4)
         val_hex=reg.to_s(16).rjust(8)
-        if (i==@iss.r1) or ((i==@iss.final_o) and (@iss.flag==0))
-          puts "GREEN : r#{i} #{@iss.flag}"
+        if (i==@iss.r1) or ((i==@iss.o) && (@iss.flag==0))
           cr.set_source_rgba GREEN.red,GREEN.green,GREEN.blue
         end
         if i==@iss.r2
