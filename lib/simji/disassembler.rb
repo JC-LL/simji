@@ -44,7 +44,7 @@ module SIMJI
         imm_o = o #TBC
         o=o_is_reg ? "r#{o}" : imm_o
         r = instr.bit_field(4..0)
-        asm << "#{o},#{r}"
+        asm << "#{o},r#{r}"
       when :braz,:branz
         r = instr.bit_field(26..22)
         a = instr.bit_field(21..0)
