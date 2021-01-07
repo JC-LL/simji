@@ -86,8 +86,8 @@ module SIMJI
 
     def parse_instr line
       line.slice!(/\A\s*/) # suppress leading space
-      #puts line
-      instr,args=/(\w+)\s*((\w+)\s*(,\s*\w+)*)?/.match(line).captures
+      puts line
+      instr,args=/(\w+)\s*(([+-]?\w+)\s*(,\s*[+-]?\w+)*)?/.match(line).captures
       instr=instr.to_sym
       args=args.split(",").collect{|arg| arg.gsub(" ",'')} if args
       return [instr,args]
