@@ -95,11 +95,11 @@ module SIMJI
 
       case opcode
       when OPCODE[:add]
-        @reg[r2]=@reg[r1] + final_o
+        @reg[r2]=(@reg[r1] + final_o) & 0xFFFFFFFF
       when OPCODE[:sub]
-        @reg[r2]=@reg[r1] - final_o
+        @reg[r2]=(@reg[r1] - final_o) & 0xFFFFFFFF
       when OPCODE[:mul]
-        @reg[r2]=@reg[r1] * final_o
+        @reg[r2]=(@reg[r1] * final_o) & 0xFFFFFFFF
       when OPCODE[:div]
         @reg[r2]=@reg[r1] / final_o
       when OPCODE[:and]
@@ -109,7 +109,7 @@ module SIMJI
       when OPCODE[:xor]
         @reg[r2]=@reg[r1] ^ final_o
       when OPCODE[:shl]
-        @reg[r2]=@reg[r1] << final_o
+        @reg[r2]=(@reg[r1] << final_o) & 0xFFFFFFFF
       when OPCODE[:slt]
         @reg[r2]=(@reg[r1] <  final_o) ? 1 : 0
       when OPCODE[:sle]
